@@ -86,11 +86,14 @@ jobs:
 #     needs:
 #      - SCA
     steps:
-      - uses: actions/checkout@v2
-      - name: PHPStan
-        uses: chindit/actions-phpstan@master
+      - uses: AppThreat/sast-scan-action@master
         with:
-          arguments:  '--level=1'
+          type: "python"
+
+      - uses: actions/upload-artifact@v1
+         with:
+            name: reports
+            path: reports
 #   build:
 #     # The type of runner that the job will run on
 #     runs-on: ${{matrix.platforms}}
