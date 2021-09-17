@@ -1,0 +1,117 @@
+# This is a basic workflow to help you get started with Actions
+
+name: paDevSecOps
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  
+#   Auto_Code_Review:
+#     name: ACR-DevSkin
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v2
+#       - run: echo "Starting the Automated Code Review using DevSkin"
+#       - uses: microsoft/DevSkim-Action@v1
+#       - uses: github/codeql-action/upload-sarif@v1
+#         with:
+#          sarif_file: devskim-results.sarif
+#       - name: artifacts
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: DevSkim-artifact
+#           path: ${{ github.workspace }}  
+#   SIS:
+#     name: Sensitive Information Scan (TruffleHog)
+#     runs-on: ubuntu-latest
+#     needs: Auto_Code_Review
+#     steps:
+#     - uses: actions/checkout@master
+#     - name: trufflehog-actions-scan
+#       uses: edplato/trufflehog-actions-scan@master
+ 
+
+
+  
+#   SCA:
+#     name: Source Composition Analysis (OWASP dependency check)
+#     runs-on: ubuntu-latest
+#     needs:
+#       - SIS
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v2
+#       - name: Depcheck
+#         uses: dependency-check/Dependency-Check_Action@main
+#         id: Depcheck
+#         with:
+#           project: 'test'
+#           path: '.'
+#           format: 'HTML'    
+#           others: ''
+#       - name: Upload Test results
+#         uses: actions/upload-artifact@master
+#         with:
+#            name: Depcheck report
+#            path: ${{github.workspace}}/reports
+           
+#   SCA2:
+#     name: SCA Debricket
+#     runs-on: ubuntu-latest
+#     needs: SIS
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+#       - name: Using Debricket SAST solution
+#         uses: debricked/actions/scan@v1
+#         env:
+#           USERNAME: '${{ secrets.DEBRICKED_USERNAME }}'
+#           PASSWORD: '${{ secrets.DEBRICKED_PASSWORD }}'
+
+  SAST:
+    name: Static Application Security Testing
+    runs-on: ubuntu-latest
+#     needs:
+#      - SCA
+    steps:
+      - uses: actions/checkout@v2
+      - name: PHPStan
+        uses: chindit/actions-phpstan@master
+        with:
+          arguments:  '--level=1'
+#   build:
+#     # The type of runner that the job will run on
+#     runs-on: ${{matrix.platforms}}
+#     needs:
+#       - SCA
+#     strategy:
+#       matrix:
+#         platforms: [ubuntu-latest]
+
+#     # Steps represent a sequence of tasks that will be executed as part of the job
+#     steps:
+#       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+#       - uses: actions/checkout@v2
+#         name: Check out code
+
+#       - uses: mr-smithers-excellent/docker-build-push@v5
+#         name: Build & push Docker image
+#         with:
+#           image: misterbert0ni/mobsf
+#           tags: v1, latest
+#           registry: docker.io
+#           dockerfile: Dockerfile
+#           username: ${{ secrets.DOCKER_USERNAME }}
+#           password: ${{ secrets.DOCKER_PASSWORD }}
