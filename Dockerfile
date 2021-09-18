@@ -4,7 +4,7 @@ LABEL maintainer="PrestaShop Core Team <coreteam@prestashop.com>"
 ENV PS_VERSION 1.7-7.0
 
 # Get PrestaShop
-ADD $ps_url /tmp/prestashop.zip
+ADD https://www.prestashop.com/download/old/ /tmp/prestashop.zip
 
 # Extract
 RUN mkdir -p /tmp/data-ps \
